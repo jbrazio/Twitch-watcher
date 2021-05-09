@@ -16,24 +16,27 @@ const screenshotFolder = './screenshots/';
 const baseUrl = 'https://www.twitch.tv/';
 const inventoryUrl = `${baseUrl}drops/inventory`;
 
-const userAgent = (process.env.userAgent || 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
-const streamersUrl = (process.env.streamersUrl || 'https://www.twitch.tv/directory/game/VALORANT?tl=c2542d6d-cd10-4532-919b-3d19f30a768b');
+// const userAgent = (process.env.userAgent || 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
+// either get the current userAgent, or fall back to the one provided
+const userAgent = (process.env.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36');
+const streamersUrl = (process.env.streamersUrl || 'https://www.twitch.tv/directory/game/World%20of%20Warships?tl=c2542d6d-cd10-4532-919b-3d19f30a768b');
 
-const scrollDelay = (Number(process.env.scrollDelay) || 2000);
-const scrollTimes = (Number(process.env.scrollTimes) || 5);
+const scrollDelay = (Number(process.env.scrollDelay) || getRandomInt(1,6) * 1000);
+const scrollTimes = (Number(process.env.scrollTimes) || getRandomInt(2,8));
 
-const minWatching = (Number(process.env.minWatching) || 15); // Minutes
-const maxWatching = (Number(process.env.maxWatching) || 30); //Minutes
+const minWatching = (Number(process.env.minWatching) || getRandomInt(3,15)); // Minutes
+const maxWatching = (Number(process.env.maxWatching) || getRandomInt(15,35)); //Minutes
 
-const noChannelFoundWait = (Number(process.env.noChannelFoundWait) || 5); // Minutes
+const noChannelFoundWait = (Number(process.env.noChannelFoundWait) || getRandomInt(2,15)); // Minutes
 
 const checkForDrops = (process.env.checkForDrops || true);
 
-const streamerListRefresh = (Number(process.env.streamerListRefresh) || 1);
-const streamerListRefreshUnit = (process.env.streamerListRefreshUnit || 'hour'); //https://day.js.org/docs/en/manipulate/add
+const streamerListRefresh = (Number(process.env.streamerListRefresh) || getRandomInt(15,90));
+const streamerListRefreshUnit = (process.env.streamerListRefreshUnit || 'minute'); //https://day.js.org/docs/en/manipulate/add
 
-const channelsWithPriority = process.env.channelsWithPriority ? process.env.channelsWithPriority.split(",") : [];
-const watchAlwaysTopStreamer = (process.env.watchAlwaysTopStreamer || false);
+// Add channel names (i.e. World of Warships is worldofwarships, look at the url, https://www.twitch.tv/worldofwarships) and pick the streamers in order of preference.
+const channelsWithPriority = process.env.channelsWithPriority ? process.env.channelsWithPriority.split(",") : ["worldofwarships","searaptor00" ,"statsbloke"];
+const watchAlwaysTopStreamer = (process.env.watchAlwaysTopStreamer || true);
 
 const showBrowser = false; // false state equ headless mode;
 const proxy = (process.env.proxy || ""); // "ip:port" By https://github.com/Jan710
@@ -41,8 +44,8 @@ const proxyAuth = (process.env.proxyAuth || "");
 
 const browserScreenshot = (process.env.browserScreenshot || false);
 
-const browserClean = 1;
-const browserCleanUnit = 'hour';
+const browserClean = getRandomInt(30,180);
+const browserCleanUnit = 'minute';
 
 var browserConfig = {
   headless: !showBrowser,
@@ -89,11 +92,12 @@ async function viewRandomPage(browser, page) {
         await getAllStreamer(page); //Call getAllStreamer function and refresh the list
         streamer_last_refresh = dayjs().add(streamerListRefresh, streamerListRefreshUnit); //https://github.com/D3vl0per/Valorant-watcher/issues/25
       }
-
+      
       let watch;
 
       if (watchAlwaysTopStreamer) {
         watch = streamers[0];
+        console.log(`Top streamer is ${streamers[0]}`)
       } else {
         watch = streamers[getRandomInt(0, streamers.length - 1)]; //https://github.com/D3vl0per/Valorant-watcher/issues/27
       }
@@ -113,7 +117,7 @@ async function viewRandomPage(browser, page) {
       }
       else {
 
-        var sleep = getRandomInt(minWatching, maxWatching) * 60000; //Set watuching timer
+        var sleep = getRandomInt(minWatching, maxWatching) * 60000; //Set watching timer
 
         console.log('\n🔗 Now watching streamer: ', baseUrl + watch);
 
@@ -194,6 +198,7 @@ async function claimDropsIfAny(page) {
     console.log(`🔎 ${claimDrops.length} drop(s) found!`);
     for (var i = 0; i < claimDrops.length; i++) {
       await clickWhenExist(page, campaignInProgressDropClaimQuery); // Claim drop X times based on how many drops are available
+      // unsure if working properly, could be due to version of Chrome/Chromium and Puppeteer not matching. 
     }
     console.log(`✅ ${claimDrops.length} drop(s) claimed!`);
   }
@@ -265,7 +270,7 @@ async function spawnBrowser() {
   var browser = await puppeteer.launch(browserConfig);
   var page = await browser.newPage();
 
-  console.log('🔧 Setting User-Agent...');
+  console.log(`🔧 Setting User-Agent...\n ${userAgent} `);
   await page.setUserAgent(userAgent); //Set userAgent
 
   console.log('🔧 Setting auth token...');
