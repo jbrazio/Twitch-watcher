@@ -33,13 +33,14 @@
 ### Windows
 1. Login to your twitch account
 2. Open inspector(F12 or Ctrl+Shift+I) on main site
-3. Find the stored cookie section
-4. Copy **auth-token**
-5. Clone this repo
-6. Install Chromium
+3. Find the stored cookie section (see guide picture below for Chrome/Chromium) it should look something *like* this: `rxk38rh5qtyw95fkvm7kgfceh4mh6u`
+4. Copy **auth-token** ![Like this](https://i.imgur.com/DuM6guT.png)
+5. Clone/Download this repo
+6. Install Chromium (or use the installer .bat packaged with it)
 7. Usually the path to the Chromium executable is: C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe
-8. Install the dependencies with `npm install`
-9. Start the program with `npm start`
+8. Instead of steps 6, 9, and 10, you can simply run RunMe.bat, and it will automatically install Chromium, npm, nodejs, run `npm install`, `npm start`, all as needed.
+9. Install the dependencies with `npm install`
+10. Start the program with `npm start`
 ### Linux
 1. Login to your twitch account
 2. Open inspector(F12 or Ctrl+Shift+I) on main site
@@ -50,6 +51,11 @@
 7. Locate Chromium executable: `whereis chromium` or `whereis chromium-browser`
 8. Install the dependencies with `npm install`
 9. Start the program with `npm start`
+
+#### Add/Change Preferred Streamers
+As is, it will look for twitch.tv/worldofwarships, then twitch.tv/searaptor00, then twitch.tv/statsbloke, and if none of those are available, it will then go to https://www.twitch.tv/directory/game/World%20of%20Warships?tl=c2542d6d-cd10-4532-919b-3d19f30a768b and find the top streamer that's currently broadcasting that supports drops. If you'd like to add or change the order of streamers, you can do so simply by adding to the list. As is, it's `["worldofwarships","searaptor00","statsbloke"]`, if you want to add another streamer in there, say flambass, you simple add another entry like so: `["worldofwarships","searaptor00","statsbloke","flambass"]`, be sure that you're using the name that you can go to their stream by typing twitch.tv/flambass, or it won't work. You simply have to change that part of the code in `app.js`, on line 38, as pictured here:
+![simple!](https://i.imgur.com/CW9fJQB.png) You can open the file in notepad or any text editor (not Word!), such as Notepad++, VSCode, SublimeText, Vim, Nano, Emacs, whatever.
+
 
 ## Docker
 <p align="center">
