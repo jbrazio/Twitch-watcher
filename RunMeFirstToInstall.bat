@@ -42,6 +42,7 @@ REM set choco to not require a "y" for every package
 choco feature enable -n=allowGlobalConfirmation
 REM install and nodejs (and with it, npm)
 )
+npm install pm2 -g
 choco install nodejs
 REM refresh environmental variables one more time to get npm on the cmd line
 refreshenv
