@@ -7,4 +7,6 @@ IF NOT EXIST config.json (
 npm install
 )
 REM start the twitch water program
-npm start
+REM npm start
+pm2 --name Twitch-watcher start npm -- start
+

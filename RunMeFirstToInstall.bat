@@ -34,7 +34,8 @@ REM if choco is not installed, install it.
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
 REM refresh the environmental variables so choco is available as a command
 refreshenv
-
+mkdir C:\etc\.pm2
+@"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Environment]::SetEnvironmentVariable('PM2_HOME', 'C:\etc\.pm2', [System.EnvironmentVariableTarget]::Machine)"
 REM npm -v 
 REM echo %ERRORLEVEL%
 REM IF %ERRORLEVEL% NEQ 0 (
@@ -42,8 +43,11 @@ REM set choco to not require a "y" for every package
 choco feature enable -n=allowGlobalConfirmation
 REM install and nodejs (and with it, npm)
 )
+refreshenv
+choco install nodejs -y
 npm install pm2 -g
-choco install nodejs
+cd C:\etc\.pm2
+pm2 save
 REM refresh environmental variables one more time to get npm on the cmd line
 refreshenv
 REM check if chromium is installed (assuming a 64bit machine here), if it's not, then install chromium
