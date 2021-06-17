@@ -46,8 +46,11 @@ REM install and nodejs (and with it, npm)
 refreshenv
 choco install nodejs -y
 npm install pm2 -g
+refreshenv
+
 cd C:\etc\.pm2
 pm2 save
+npm install -g pm2-windows-service
 REM refresh environmental variables one more time to get npm on the cmd line
 refreshenv
 REM check if chromium is installed (assuming a 64bit machine here), if it's not, then install chromium
