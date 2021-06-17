@@ -58,3 +58,4 @@ IF NOT EXIST "%programfiles(x86)%\Google\Chrome\Application\chrome.exe" (
     choco install chromium -y
 )
 
+start cmd /c pm2-service-install -n PM2
