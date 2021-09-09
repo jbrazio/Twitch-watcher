@@ -19,7 +19,7 @@ const inventoryUrl = `${baseUrl}drops/inventory`;
 // const userAgent = (process.env.userAgent || 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/78.0.3904.108 Safari/537.36');
 // either get the current userAgent, or fall back to the one provided
 const userAgent = (process.env.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36');
-const streamersUrl = (process.env.streamersUrl || 'https://www.twitch.tv/directory/game/World%20of%20Warships?tl=c2542d6d-cd10-4532-919b-3d19f30a768b');
+const streamersUrl = (process.env.streamersUrl || 'https://www.twitch.tv/directory/game/World%20of%20Warships');
 
 const scrollDelay = (Number(process.env.scrollDelay) || getRandomInt(1,6) * 1000);
 const scrollTimes = (Number(process.env.scrollTimes) || getRandomInt(2,8));
